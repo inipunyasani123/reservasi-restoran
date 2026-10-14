@@ -6,10 +6,10 @@ import Kaki from '@/components/Kaki';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['500', '600', '700'], variable: '--font-playfair', display: 'swap' });
 
-const __jsonld = {"@context":"https://schema.org","@type":"WebSite","name":"Pawon Lirih","description":"Reservasi meja Pawon Lirih, restoran masakan rumahan Jawa di Yogyakarta: pilih meja langsung di denah, lihat menu, atau pesan tempat untuk rombongan.","url":"https://reservasi-restoran-gilt.vercel.app","inLanguage":"id"};
+const __jsonld = {"@context":"https://schema.org","@type":"WebSite","name":"Pawon Lirih","description":"Reservasi meja Pawon Lirih, restoran masakan rumahan Jawa di Yogyakarta: pilih meja langsung di denah, lihat menu, atau pesan tempat untuk rombongan.","url":"https://reservasi-restoran.pintuweb.id","inLanguage":"id"};
 
 export const metadata = {
-  metadataBase: new URL("https://reservasi-restoran-gilt.vercel.app"),
+  metadataBase: new URL("https://reservasi-restoran.pintuweb.id"),
   title: { default: "Pawon Lirih — Pesan meja lewat denah", template: "%s — Pawon Lirih" },
   description: "Reservasi meja Pawon Lirih, restoran masakan rumahan Jawa di Yogyakarta: pilih meja langsung di denah, lihat menu, atau pesan tempat untuk rombongan.",
   applicationName: "Pawon Lirih",
@@ -17,11 +17,11 @@ export const metadata = {
   authors: [{ name: "Pawon Lirih" }],
   creator: "Pawon Lirih",
   publisher: "Pawon Lirih",
-  alternates: { canonical: "https://reservasi-restoran-gilt.vercel.app" },
+  alternates: { canonical: "https://reservasi-restoran.pintuweb.id" },
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://reservasi-restoran-gilt.vercel.app",
+    url: "https://reservasi-restoran.pintuweb.id",
     siteName: "Pawon Lirih",
     title: "Pawon Lirih — Pesan meja lewat denah",
     description: "Reservasi meja Pawon Lirih, restoran masakan rumahan Jawa di Yogyakarta: pilih meja langsung di denah, lihat menu, atau pesan tempat untuk rombongan.",

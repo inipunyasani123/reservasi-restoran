@@ -2,7 +2,7 @@
 
 Restoran masakan rumahan Jawa (fiktif) di Yogyakarta. Paradigma **denah meja**: pilih hari, jam, dan jumlah tamu, lalu klik meja yang masih kosong langsung di denah.
 
-**Demo live:** https://reservasi-restoran-gilt.vercel.app
+**Demo live:** https://reservasi-restoran.pintuweb.id
 
 ![Tangkapan layar](public/og.jpg)
 

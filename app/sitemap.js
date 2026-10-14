@@ -1,4 +1,4 @@
-const URL = 'https://reservasi-restoran-gilt.vercel.app';
+const URL = 'https://reservasi-restoran.pintuweb.id';
 
 export default function sitemap() {
   const now = new Date();

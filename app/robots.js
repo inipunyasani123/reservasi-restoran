@@ -1,7 +1,7 @@
 export default function robots() {
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://reservasi-restoran-gilt.vercel.app/sitemap.xml",
-    host: "https://reservasi-restoran-gilt.vercel.app",
+    sitemap: "https://reservasi-restoran.pintuweb.id/sitemap.xml",
+    host: "https://reservasi-restoran.pintuweb.id",
   };
 }
