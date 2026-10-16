@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Minus, Plus, Check, Clock, User, Phone, MessageSquare, MapPin } from 'lucide-react';
 import { resto, terisiContoh } from '@/lib/data';
 import { useLocalStorage } from '@/lib/useLocalStorage';
 import { useHariIni } from '@/lib/useHariIni';
+import { useDialog } from '@/lib/useDialog';
 import { tambahHari, hariKe, fmtTanggal, sudahLewat, kodePesan } from '@/lib/waktu';
 import FloorMap from './FloorMap';
 
@@ -21,6 +21,21 @@ export default function RestoApp() {
   const [selectedId, setSelectedId] = useState(null);
   const [form, setForm] = useState(KOSONG);
   const [done, setDone] = useState(null);
+  const dialog = useDialog(!!done, () => setDone(null));
+  const judulMeja = useRef(null);
+  const [gulir, setGulir] = useState(false);
+  // Memilih meja menggulir ke formulir (di ponsel letaknya di bawah denah) dan memfokuskan judulnya.
+  const pilihMeja = (id) => { setSelectedId(id); setGulir(true); };
+  useEffect(() => {
+    if (!gulir) return;
+    setGulir(false);
+    const h = judulMeja.current;
+    if (!h) return;
+    const r = h.getBoundingClientRect();
+    // Di layar lebar formulir biasanya sudah terlihat di samping denah: tidak perlu menggulir.
+    if (r.top < 80 || r.bottom > window.innerHeight - 160) h.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    h.focus({ preventScroll: true });
+  }, [gulir]);
 
   const lewat = (d, t) => (sekarang ? sudahLewat(d, t, 30, sekarang) : false);
   const libur = (d) => resto.libur.includes(hariKe(d));
@@ -79,18 +94,24 @@ export default function RestoApp() {
 
           <section aria-labelledby="h-tanggal">
             <h2 id="h-tanggal" className="mb-3 text-lg font-semibold text-stone-900">Tanggal</h2>
-            {!hari ? <p className="text-sm text-stone-600">Memuat tanggal…</p> : (
-              <div className="relative flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {/* Sepuluh hari dalam grid 5 x 2, tanpa geser; kerangka seukuran isi selama tanggal WIB dihitung. */}
+            {!hari ? (
+              <div className="grid grid-cols-5 gap-2" role="status">
+                <span className="sr-only">Memuat tanggal…</span>
+                {Array.from({ length: 10 }, (_, i) => <span key={i} className="h-[4.75rem] rounded-xl border border-stone-200 bg-white/60" aria-hidden="true" />)}
+              </div>
+            ) : (
+              <div className="grid grid-cols-5 gap-2">
                 {kartuHari.map((d) => {
                   const tutup = libur(d);
                   const habis = !tutup && !bisaDipesan(d);
                   return (
                     <button key={d} type="button" disabled={tutup || habis} onClick={() => { setDate(d); setSelectedId(null); }} aria-pressed={date === d}
-                      aria-label={`${fmtTanggal(d)}${tutup ? ', tutup' : habis ? ', jam reservasi sudah lewat' : ''}`}
-                      className={`flex w-16 shrink-0 flex-col items-center gap-1 rounded-xl border py-3 disabled:cursor-not-allowed disabled:border-dashed disabled:bg-transparent disabled:text-stone-500 ${pilihan(date === d)}`}>
-                      <span className="text-xs uppercase">{HARI[hariKe(d)]}</span>
-                      <span className="font-display text-xl font-bold">{Number(d.slice(8))}</span>
-                      {tutup && <span className="text-[10px] font-semibold">Tutup</span>}
+                      className={`flex h-[4.75rem] flex-col items-center justify-center gap-0.5 rounded-xl border disabled:cursor-not-allowed disabled:border-dashed disabled:bg-transparent disabled:text-stone-500 ${pilihan(date === d)}`}>
+                      <span className="text-xs uppercase">{HARI[hariKe(d)]}</span>{' '}
+                      <span className="font-display text-xl font-bold leading-tight">{Number(d.slice(8))}</span>
+                      <span className="sr-only"> {fmtTanggal(d, { month: 'long' })}{habis ? ', jam reservasi sudah lewat' : ''}</span>
+                      {tutup && <span className="text-[10px] font-semibold leading-none">Tutup</span>}
                     </button>
                   );
                 })}
@@ -134,9 +155,14 @@ export default function RestoApp() {
           <h2 className="mb-3 text-lg font-semibold text-stone-900">Pilih meja{date && time ? <span className="font-normal text-stone-600"> · {fmtTanggal(date, { weekday: 'short', day: 'numeric', month: 'short' })}, {time}</span> : null}</h2>
           <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm sm:p-6">
             {date && time ? (
-              <FloorMap tables={resto.tables} bookedIds={bookedIds} guests={guests} selectedId={selectedId} onSelect={setSelectedId} />
+              <FloorMap tables={resto.tables} bookedIds={bookedIds} guests={guests} selectedId={selectedId} onSelect={pilihMeja} />
+            ) : hari ? (
+              <p className="py-16 text-center text-sm text-stone-600">Tidak ada jam yang tersisa dalam sepuluh hari ke depan.</p>
             ) : (
-              <p className="py-16 text-center text-sm text-stone-600">{hari ? 'Tidak ada jam yang tersisa dalam sepuluh hari ke depan.' : 'Memuat denah…'}</p>
+              <div aria-hidden="true">
+                <div className="aspect-[16/12] w-full rounded-2xl border border-stone-200 bg-[repeating-linear-gradient(45deg,#f5efe6,#f5efe6_14px,#f2ebe0_14px,#f2ebe0_28px)] sm:aspect-[16/11]" />
+                <div className="mt-4 h-10 sm:h-4" />
+              </div>
             )}
           </div>
 
@@ -146,9 +172,9 @@ export default function RestoApp() {
                 Pilih meja bertepi <span className="font-semibold text-emerald-800">hijau</span> di denah untuk melanjutkan.
               </p>
             ) : (
-              <motion.form initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} onSubmit={confirm} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+              <form onSubmit={confirm} aria-labelledby="h-meja-dipilih" className="anim-naik scroll-mt-24 rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-stone-100 pb-3">
-                  <p className="font-display text-xl font-bold text-amber-800">Meja {selected.id}</p>
+                  <h2 id="h-meja-dipilih" ref={judulMeja} tabIndex={-1} className="scroll-mt-24 font-display text-xl font-bold text-amber-800 outline-none">Meja {selected.id}</h2>
                   <p className="flex items-center gap-3 text-sm text-stone-700">
                     <span className="flex items-center gap-1"><MapPin size={14} aria-hidden="true" />{selected.zona}</span>
                     <span className="flex items-center gap-1"><Users size={14} aria-hidden="true" />{selected.seats} kursi</span>
@@ -174,16 +200,15 @@ export default function RestoApp() {
                 </div>
                 <button type="submit" className="mt-4 w-full rounded-xl bg-amber-700 py-3.5 text-sm font-semibold text-white transition hover:bg-amber-800">Simpan reservasi</button>
                 <p className="mt-2 text-center text-xs text-stone-600">Purwarupa: reservasi disimpan di peramban ini, tidak dikirim ke restoran.</p>
-              </motion.form>
+              </form>
             )}
           </div>
         </div>
       </main>
 
-      <AnimatePresence>
-        {done && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 p-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDone(null)}>
-            <motion.div role="dialog" aria-modal="true" aria-labelledby="judul-selesai" initial={{ scale: 0.9, y: 10 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-sm rounded-2xl bg-white p-7 text-center shadow-xl">
+      {done && (
+          <div className="anim-pudar fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 p-5" onClick={() => setDone(null)}>
+            <div ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="judul-selesai" onClick={(e) => e.stopPropagation()} className="anim-skala w-full max-w-sm rounded-2xl bg-white p-7 text-center shadow-xl outline-none">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-700 text-white"><Check size={28} /></div>
               <h2 id="judul-selesai" className="mt-4 font-display text-2xl font-bold text-stone-900">Reservasi tersimpan</h2>
               <p className="mt-1 text-sm text-stone-700">Kode <span className="font-mono font-semibold text-stone-900">{done.kode}</span> · atas nama {done.nama}</p>
@@ -198,10 +223,9 @@ export default function RestoApp() {
                 <Link href="/reservasi" className="rounded-xl bg-amber-700 py-3 text-sm font-semibold text-white transition hover:bg-amber-800">Reservasi saya</Link>
                 <button type="button" onClick={() => setDone(null)} className="rounded-xl border border-stone-300 py-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50">Tutup</button>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+          </div>
+      )}
     </div>
   );
 }

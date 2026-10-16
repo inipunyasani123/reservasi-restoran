@@ -1,10 +1,11 @@
 import FormRombongan from '@/components/FormRombongan';
+import { halaman } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Rombongan',
-  description: 'Pesan tempat untuk 10–30 orang di ruang belakang Pawon Lirih: pilih paket, lihat perkiraan biaya termasuk pajak, dan uang muka.',
-  alternates: { canonical: '/rombongan' },
-};
+export const metadata = halaman({
+  judul: 'Pesan untuk rombongan',
+  deskripsi: 'Pesan tempat untuk 10–30 orang di ruang belakang Pawon Lirih: pilih paket, lihat perkiraan biaya termasuk pajak, dan uang muka.',
+  path: '/rombongan',
+});
 
 export default function RombonganPage() {
   return (

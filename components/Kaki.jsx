@@ -4,8 +4,8 @@ import { resto, nav } from '@/lib/data';
 export default function Kaki() {
   return (
     <footer className="relative z-10 mt-16 border-t border-[#ddc1b3]/60 bg-[#f5ede4]">
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
-        <div>
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-8 px-5 py-10 sm:grid-cols-3">
+        <div className="col-span-2 sm:col-span-1">
           <p className="font-display text-xl font-bold text-amber-900">{resto.name}</p>
           <p className="mt-2 text-sm text-stone-700">{resto.tagline}. {resto.kota}.</p>
         </div>
@@ -15,8 +15,8 @@ export default function Kaki() {
           <p className="mt-1">Meja ditahan {resto.tahanMeja} menit dari jam reservasi.</p>
         </div>
         <nav aria-label="Kaki" className="text-sm">
-          <ul className="space-y-1.5">
-            {nav.map((n) => <li key={n.href}><Link href={n.href} className="text-stone-700 underline-offset-4 hover:text-amber-800 hover:underline">{n.label}</Link></li>)}
+          <ul className="space-y-1">
+            {nav.map((n) => <li key={n.href}><Link href={n.href} className="inline-block py-1 text-stone-700 underline-offset-4 hover:text-amber-800 hover:underline">{n.label}</Link></li>)}
           </ul>
         </nav>
       </div>

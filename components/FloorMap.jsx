@@ -1,21 +1,22 @@
 'use client';
 import { Users } from 'lucide-react';
 
+// Di layar sempit meja dikecilkan (tetap >= 44 px) supaya tidak saling bertumpuk di denah yang mengecil.
 const SIZE = {
-  round: 'h-14 w-14 rounded-full',
-  square: 'h-16 w-16 rounded-xl',
-  long: 'h-14 w-28 rounded-xl',
+  round: 'h-11 w-11 sm:h-14 sm:w-14 rounded-full',
+  square: 'h-12 w-12 sm:h-16 sm:w-16 rounded-xl',
+  long: 'h-11 w-20 sm:h-14 sm:w-28 rounded-xl',
 };
 
 // Denah meja: tiap meja diposisikan absolut (persen). Klik meja tersedia untuk memilih.
 export default function FloorMap({ tables, bookedIds, guests, selectedId, onSelect }) {
   return (
-    <div>
-      <div className="relative mx-auto aspect-[16/11] w-full overflow-hidden rounded-2xl border border-stone-200 bg-[repeating-linear-gradient(45deg,#f5efe6,#f5efe6_14px,#f2ebe0_14px,#f2ebe0_28px)] shadow-inner">
-        {/* Label area */}
-        <span className="absolute left-3 top-3 rounded-md bg-white/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-stone-600">
-          Pintu Masuk
-        </span>
+    <div className="relative">
+      {/* Label pintu duduk di garis tepi denah (seperti legenda), tidak tertutup meja */}
+      <span className="absolute -top-2.5 left-4 z-10 rounded-md border border-stone-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-stone-600">
+        Pintu masuk
+      </span>
+      <div className="relative mx-auto aspect-[16/12] w-full overflow-hidden rounded-2xl border border-stone-200 bg-[repeating-linear-gradient(45deg,#f5efe6,#f5efe6_14px,#f2ebe0_14px,#f2ebe0_28px)] shadow-inner sm:aspect-[16/11]">
 
         {tables.map((t) => {
           const booked = bookedIds.includes(t.id);
@@ -38,13 +39,14 @@ export default function FloorMap({ tables, bookedIds, guests, selectedId, onSele
               disabled={disabled}
               onClick={() => onSelect(t.id)}
               style={{ left: `${t.x}%`, top: `${t.y}%`, transform: 'translate(-50%, -50%)' }}
-              aria-label={`Meja ${t.id}, ${t.seats} kursi, ${t.zona}${booked ? ', sudah dipesan' : tooSmall ? ', kursi kurang' : ', tersedia'}`}
               aria-pressed={selected}
               className={`absolute flex flex-col items-center justify-center border-2 text-center transition-all duration-200 ${SIZE[t.shape]} ${cls}`}
             >
-              <span className="text-xs font-bold leading-none">{t.id}</span>
+              {/* Nama dari konten: "Meja T1 2 kursi, Teras, tersedia" (teks terlihat ikut dibacakan). */}
+              <span className="sr-only">Meja </span>
+              <span className="text-xs font-bold leading-none">{t.id}</span>{' '}
               <span className="mt-0.5 flex items-center gap-0.5 text-[10px] font-medium leading-none">
-                <Users size={9} /> {t.seats}
+                <Users size={9} /> {t.seats}<span className="sr-only"> kursi, {t.zona}{booked ? ', sudah dipesan' : tooSmall ? ', kursi kurang' : ', tersedia'}</span>
               </span>
             </button>
           );

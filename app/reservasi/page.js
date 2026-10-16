@@ -1,11 +1,12 @@
 import DaftarReservasi from '@/components/DaftarReservasi';
+import { halaman } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Reservasi saya',
-  description: 'Lihat dan batalkan reservasi meja Pawon Lirih yang tersimpan di peramban ini.',
-  alternates: { canonical: '/reservasi' },
+export const metadata = halaman({
+  judul: 'Reservasi saya',
+  deskripsi: 'Lihat dan batalkan reservasi meja Pawon Lirih yang tersimpan di peramban ini.',
+  path: '/reservasi',
   robots: { index: false, follow: true },
-};
+});
 
 export default function ReservasiPage() {
   return (

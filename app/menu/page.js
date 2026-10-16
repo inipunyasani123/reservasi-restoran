@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { menu, resto } from '@/lib/data';
 import { rupiah } from '@/lib/waktu';
+import { halaman } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Menu',
-  description: 'Menu Pawon Lirih: gudeg, brongkos, mangut lele, sayur lodeh, wedang uwuh, dan jajanan pasar — dengan tanda pedas, vegetarian, dan kacang.',
-  alternates: { canonical: '/menu' },
-};
+export const metadata = halaman({
+  judul: 'Menu masakan Jawa',
+  deskripsi: 'Menu Pawon Lirih: gudeg, brongkos, mangut lele, sayur lodeh, wedang uwuh, dan jajanan pasar, dengan tanda pedas, vegetarian, dan kacang.',
+  path: '/menu',
+});
 
 const WARNA = {
   pedas: 'bg-red-50 text-red-800', 'sangat pedas': 'bg-red-100 text-red-900', 'pedas ringan': 'bg-orange-50 text-orange-900',

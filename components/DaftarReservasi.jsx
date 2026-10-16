@@ -52,7 +52,7 @@ export default function DaftarReservasi() {
                     {r.zona && <li className="flex items-center gap-2"><MapPin size={15} aria-hidden="true" /> {r.zona}</li>}
                   </ul>
                   {r.catatan && <p className="mt-3 rounded-lg bg-stone-50 px-3 py-2 text-sm text-stone-700">“{r.catatan}”</p>}
-                  <button type="button" onClick={() => batal(r.id)} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-red-800 hover:underline"><X size={15} aria-hidden="true" /> Batalkan</button>
+                  <button type="button" onClick={() => batal(r.id)} className="mt-2 inline-flex items-center gap-1.5 py-2 text-sm font-semibold text-red-800 hover:underline"><X size={15} aria-hidden="true" /> Batalkan</button>
                 </li>
               );
             })}
@@ -67,7 +67,7 @@ export default function DaftarReservasi() {
             {lalu.map((r) => (
               <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 text-sm text-stone-700">
                 <span>{fmtTanggal(r.date, { day: 'numeric', month: 'short', year: 'numeric' })}, {r.time} · Meja {r.tableId} · {r.guests} orang</span>
-                <button type="button" onClick={() => setPunyaku((p) => p.filter((x) => x.id !== r.id))} className="font-semibold text-stone-800 hover:underline">Hapus</button>
+                <button type="button" onClick={() => setPunyaku((p) => p.filter((x) => x.id !== r.id))} className="-my-2 py-2 font-semibold text-stone-800 hover:underline">Hapus</button>
               </li>
             ))}
           </ul>
