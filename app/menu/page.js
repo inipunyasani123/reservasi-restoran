@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { menu, resto } from '@/lib/data';
 import { rupiah } from '@/lib/waktu';
 import { halaman } from '@/lib/seo';
@@ -8,6 +9,9 @@ export const metadata = halaman({
   deskripsi: 'Menu Pawon Lirih: gudeg, brongkos, mangut lele, sayur lodeh, wedang uwuh, dan jajanan pasar, dengan tanda pedas, vegetarian, dan kacang.',
   path: '/menu',
 });
+
+// Hidangan yang punya foto, urut sesuai menu; yang pertama tampil besar.
+const FOTO = menu.flatMap((k) => k.item.filter((m) => m.foto).map((m) => ({ ...m, kategori: k.kategori })));
 
 const WARNA = {
   pedas: 'bg-red-50 text-red-800', 'sangat pedas': 'bg-red-100 text-red-900', 'pedas ringan': 'bg-orange-50 text-orange-900',
@@ -27,7 +31,28 @@ export default function MenuPage() {
         ))}
       </nav>
 
-      <div className="mt-10 space-y-12">
+      <section aria-labelledby="h-sekilas" className="mt-10">
+        <h2 id="h-sekilas" className="flex items-center gap-4 font-display text-2xl font-bold text-amber-900">
+          Sekilas hidangan<span className="h-px flex-1 bg-[#ddc1b3]" aria-hidden="true" />
+        </h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {FOTO.map((m, i) => (
+            <li key={m.nama} className={i === 0 ? 'col-span-2 sm:row-span-2' : ''}>
+              <figure className={`relative overflow-hidden rounded-2xl bg-stone-200 ${i === 0 ? 'aspect-[16/10] sm:aspect-square' : 'aspect-square'}`}>
+                <Image src={m.foto} alt={m.fotoAlt} fill priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined}
+                  sizes={i === 0 ? '(min-width: 896px) 424px, (min-width: 640px) 48vw, 100vw' : '(min-width: 896px) 208px, (min-width: 640px) 24vw, 50vw'} className="object-cover" />
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950/85 via-stone-950/50 to-transparent px-3 pb-2.5 pt-10 text-white">
+                  <span className={`block font-display font-bold leading-tight ${i === 0 ? 'text-2xl' : 'text-lg'}`}>{m.nama}</span>
+                  <span className="block text-xs text-white/90">{m.kategori} · {rupiah(m.harga)}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-xs text-stone-600">Foto contoh hidangan sejenis, bebas pakai (CC0/domain publik).</p>
+      </section>
+
+      <div className="mt-12 space-y-12">
         {menu.map((k) => (
           <section key={k.kategori} id={k.kategori.toLowerCase().replace(/\s+/g, '-')} className="scroll-mt-24">
             <h2 className="flex items-center gap-4 font-display text-2xl font-bold text-amber-900">

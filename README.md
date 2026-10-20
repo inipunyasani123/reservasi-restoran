@@ -29,6 +29,13 @@ Restoran masakan rumahan Jawa (fiktif) di Yogyakarta. Paradigma **denah meja**: 
 - Font: Playfair Display, Inter (next/font)
 - SEO: metadata per halaman, Open Graph, sitemap.xml, dan robots.txt
 
+## Gambar
+
+`/menu` memuat foto CC0 untuk hidangan yang fotonya cocok dengan nama menu (pecel, urap, wedang uwuh, klepon, kolak
+pisang); hidangan lain sengaja tanpa foto. Denah ruang belakang di `/rombongan` adalah ilustrasi buatan sendiri
+(`scripts/ilustrasi/ruang-belakang.mjs`). Sumber dan lisensi tiap berkas: [`public/images/SUMBER.md`](public/images/SUMBER.md).
+Gambar disajikan statis dari `public/_img/` (varian WebP buatan `scripts/static-images.mjs`), tanpa Image Optimization Vercel.
+
 ## Menjalankan secara lokal
 
 ```bash
