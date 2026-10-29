@@ -10,8 +10,10 @@ export const metadata = halaman({
   path: '/menu',
 });
 
-// Hidangan yang punya foto, urut sesuai menu; yang pertama tampil besar.
-const FOTO = menu.flatMap((k) => k.item.filter((m) => m.foto).map((m) => ({ ...m, kategori: k.kategori })));
+// Sembilan hidangan pilihan untuk galeri; yang pertama tampil besar. Setiap hidangan punya foto sendiri di daftar bawah.
+const PILIHAN = ['Gudeg komplit', 'Mangut lele', 'Pecel', 'Es dawet', 'Klepon', 'Brongkos daging', 'Wedang uwuh', 'Tempe mendoan', 'Kolak pisang'];
+const SEMUA = menu.flatMap((k) => k.item.map((m) => ({ ...m, kategori: k.kategori })));
+const FOTO = PILIHAN.map((n) => SEMUA.find((m) => m.nama === n));
 
 const WARNA = {
   pedas: 'bg-red-50 text-red-800', 'sangat pedas': 'bg-red-100 text-red-900', 'pedas ringan': 'bg-orange-50 text-orange-900',
@@ -49,7 +51,7 @@ export default function MenuPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-3 text-xs text-stone-600">Foto contoh hidangan sejenis, bebas pakai (CC0/domain publik).</p>
+        <p className="mt-3 text-xs text-stone-600">Foto hidangan sejenis sebagai gambaran, bebas pakai (CC0/domain publik).</p>
       </section>
 
       <div className="mt-12 space-y-12">
@@ -60,8 +62,11 @@ export default function MenuPage() {
             </h2>
             <ul className="mt-4 divide-y divide-stone-200">
               {k.item.map((m) => (
-                <li key={m.nama} className="flex items-baseline justify-between gap-6 py-4">
-                  <div className="min-w-0">
+                <li key={m.nama} className="flex items-start gap-4 py-4">
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-stone-200 sm:h-24 sm:w-24">
+                    <Image src={m.foto} alt={m.fotoAlt} fill sizes="96px" className="object-cover" />
+                  </div>
+                  <div className="min-w-0 flex-1">
                     <p className="font-semibold text-stone-900">{m.nama}</p>
                     <p className="mt-0.5 text-sm text-stone-700">{m.desk}</p>
                     {m.tag.length > 0 && (
