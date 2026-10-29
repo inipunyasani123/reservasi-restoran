@@ -51,7 +51,7 @@ export default function MenuPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-3 text-xs text-stone-600">Foto hidangan sejenis sebagai gambaran, bebas pakai (CC0/domain publik).</p>
+        <p className="mt-3 text-xs text-stone-600">Foto hidangan sebagai gambaran: sebagian foto CC0/domain publik, sebagian gambar AI.</p>
       </section>
 
       <div className="mt-12 space-y-12">
