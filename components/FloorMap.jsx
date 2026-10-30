@@ -13,7 +13,7 @@ export default function FloorMap({ tables, bookedIds, guests, selectedId, onSele
   return (
     <div className="relative">
       {/* Label pintu duduk di garis tepi denah (seperti legenda), tidak tertutup meja */}
-      <span className="absolute -top-2.5 left-4 z-10 rounded-md border border-stone-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-stone-600">
+      <span className="absolute -top-2.5 left-4 z-10 rounded-md border border-stone-200 bg-white px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-stone-600">
         Pintu masuk
       </span>
       <div className="relative mx-auto aspect-[16/12] w-full overflow-hidden rounded-2xl border border-stone-200 bg-[repeating-linear-gradient(45deg,#f5efe6,#f5efe6_14px,#f2ebe0_14px,#f2ebe0_28px)] shadow-inner sm:aspect-[16/11]">
@@ -45,8 +45,8 @@ export default function FloorMap({ tables, bookedIds, guests, selectedId, onSele
               {/* Nama dari konten: "Meja T1 2 kursi, Teras, tersedia" (teks terlihat ikut dibacakan). */}
               <span className="sr-only">Meja </span>
               <span className="text-xs font-bold leading-none">{t.id}</span>{' '}
-              <span className="mt-0.5 flex items-center gap-0.5 text-[10px] font-medium leading-none">
-                <Users size={9} /> {t.seats}<span className="sr-only"> kursi, {t.zona}{booked ? ', sudah dipesan' : tooSmall ? ', kursi kurang' : ', tersedia'}</span>
+              <span className="mt-0.5 flex items-center gap-0.5 text-xs font-medium leading-none">
+                <Users size={11} /> {t.seats}<span className="sr-only"> kursi, {t.zona}{booked ? ', sudah dipesan' : tooSmall ? ', kursi kurang' : ', tersedia'}</span>
               </span>
             </button>
           );

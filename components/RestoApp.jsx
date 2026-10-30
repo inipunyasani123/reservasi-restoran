@@ -111,7 +111,7 @@ export default function RestoApp() {
                       <span className="text-xs uppercase">{HARI[hariKe(d)]}</span>{' '}
                       <span className="font-display text-xl font-bold leading-tight">{Number(d.slice(8))}</span>
                       <span className="sr-only"> {fmtTanggal(d, { month: 'long' })}{habis ? ', jam reservasi sudah lewat' : ''}</span>
-                      {tutup && <span className="text-[10px] font-semibold leading-none">Tutup</span>}
+                      {tutup && <span className="text-xs font-semibold leading-none">Tutup</span>}
                     </button>
                   );
                 })}
